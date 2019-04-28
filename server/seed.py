@@ -18,8 +18,25 @@ async def before_server_start(app, loop):
     user = await User.find_one({ 'groups': { '$all': [ administrator.id ] } })
 
     if not user:
-        user = await User.add({
+        admin = await User.add({
             'username': 'admin',
-            'password': 'admin',
             'groups': [ administrator.id ]
+        })
+        admin.set_password('admin')
+        await admin.save()
+
+@server.listener('before_server_start')
+async def before_server_start(app, loop):
+    professor = await Group.find_one({ 'name': 'professor' })
+
+    if not professor:
+        Group.add({
+            'name': 'professor'
+        })
+
+    student = await Group.find_one({ 'name': 'student' })
+
+    if not student:
+        Group.add({
+            'name': 'student'
         })
