@@ -6,10 +6,23 @@ from sugar_api import JSONAPIMixin
 
 class User(MongoDBModel, JSONAPIMixin):
 
+    __rate__ = ( 1, 'secondly' )
+
     __acl__ = {
-        'self': ['read', 'update'],
+        'self': ['read', 'update', 'delete'],
         'administrator': ['all'],
-        'other': ['read']
+        #'other': ['read'],
+        #'unauthorized': ['create']
+    }
+
+    __get__ = {
+        'groups': ['self', 'administrator']
+    }
+
+    __set__ = {
+        'username': ['self', 'administrator', 'unauthorized'],
+        'password': ['self', 'administrator', 'unauthorized'],
+        'groups': ['administrator']
     }
 
     __database__ = {
@@ -17,9 +30,22 @@ class User(MongoDBModel, JSONAPIMixin):
     }
 
     username = Field(required=True)
-    password = Field(required=True)
+    password = Field(required=True, computed='encrypt_password')
 
-    groups = Field(type=list, required=True)
+    groups = Field(type=list, computed='default_groups', computed_empty=True)
 
-    def set_password(self, password):
-        self.password = hashlib.sha256(password).hexdigest()
+    def on_render(self, data, token):
+        if data['attributes'].get('password'):
+            del data['attributes']['password']
+
+    def default_groups(self):
+        return [ 'users' ]
+
+    def encrypt_password(self):
+        if self.password == 'hashed-':
+            raise Exception('Invalid password.')
+
+        if self.password.startswith('hashed-'):
+            return self.password
+
+        return f'hashed-{hashlib.sha256(self.password.encode()).hexdigest()}'
