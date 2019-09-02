@@ -11,10 +11,11 @@ module.exports = {
     './src/app.js'
   ],
   devServer: {
+    port: 8000,
     hot: true,
     watchOptions: {
       poll: true
-    }
+    },
   },
   module: {
     rules: [

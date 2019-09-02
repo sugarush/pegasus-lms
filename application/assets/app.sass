@@ -1,2 +1,31 @@
-h2
-  padding: 1.5em 0 0 0
+@import url("https://fonts.googleapis.com/css?family=Forum&display=swap")
+
+@import "../bower_components/reset-scss/reset.scss"
+
+@import "color.sass"
+
+html
+  font-family: "Forum"
+  height: 100%
+
+body
+  height: 100%
+
+h1, h2
+  font-size: 2rem
+
+a
+  color: black
+  text-decoration: none
+  outline: none
+
+button
+  background-color: $light-purple
+  transition: background-color 0.5s
+  color: white
+  border-radius: 5px
+  border: none
+  padding: 0.5rem
+
+button:hover
+  background-color: $purple
