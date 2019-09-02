@@ -25,6 +25,9 @@ fi
 mongod --dbpath "${MONGODB_DATA}" &
 pids+=("$!")
 
+redis-server &
+pids+=("$!")
+
 python server &
 pids+=("$!")
 
@@ -45,7 +48,7 @@ trap "kill_pids" SIGINT
 
 function kill_pids() {
   for pid in ${pids[@]}; do
-    kill -TERM "${pid}"
+    kill -QUIT "${pid}"
   done
 }
 
