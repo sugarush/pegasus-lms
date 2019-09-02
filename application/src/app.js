@@ -5,11 +5,12 @@ import WebToken from "../bower_components/sugar-data/lib/webtoken.js";
 import { router } from "./router/router.js";
 import { store } from "./store/store.js";
 import "./filters/filters.js";
-import App from "./App.vue";
 
 import { HOST } from "./settings.js";
 
 import Vue from "vue";
+
+import App from "./App.vue";
 
 
 async function main() {
